@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.professorangoti.condominio.model.Proprietario;
 import com.professorangoti.condominio.repository.ProprietarioRepository;
@@ -38,6 +39,10 @@ public class ProprietarioController {
         return "rel_prop";
     }
 
-
+    @GetMapping("excluir_prop")
+    public String apagaProp(@RequestParam("id") Long chave) {
+        repository.delete(chave);
+        return "redirect:/rel_prop";
+    }
 
 }

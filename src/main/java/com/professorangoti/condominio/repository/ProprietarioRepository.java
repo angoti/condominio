@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.professorangoti.condominio.model.Proprietario;
 
@@ -30,6 +31,11 @@ public class ProprietarioRepository {
     }
 
     private Proprietario mapper(ResultSet registro, int contador) throws SQLException {
-        return new Proprietario(registro.getLong("id_proprietario"), registro.getString("nome"), registro.getString("telefone"));
+        return new Proprietario(registro.getLong("id_proprietario"), registro.getString("nome"),
+                registro.getString("telefone"));
+    }
+
+    public void delete(Long id) {
+        jdbc.update("delete from proprietario where id_proprietario=?", id);
     }
 }
