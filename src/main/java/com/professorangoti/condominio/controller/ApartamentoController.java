@@ -6,10 +6,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.FileSystemUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -40,9 +42,13 @@ public class ApartamentoController {
         model.addAttribute("proprietarios", repoPropietario.findAll());
         return "form_apto";
     }
-
+    
     @PostMapping("cad_apto")
-    public String gravaNovoApartamento(Apartamento apartamento) {
+    public String gravaNovoApartamento(@Valid Apartamento apartamento, BindingResult validacao, Model model) {
+        if (validacao.hasErrors()) {
+            model.addAttribute("proprietarios", repoPropietario.findAll());
+            return "form_apto";
+        }
         repoApartamento.save(apartamento);
         return "redirect:/rel_apto";
     }

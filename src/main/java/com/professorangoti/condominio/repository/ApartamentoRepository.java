@@ -59,18 +59,19 @@ public class ApartamentoRepository {
     }
 
     public Apartamento findById(Long id) {
-        return jdbc.queryForObject("select * from apartamento a, proprietario p where a.id_apartamento=?;", (registro, contador) -> {
-            Apartamento apto = new Apartamento();
-            apto.setId(registro.getLong("id_apartamento"));
-            apto.setNumeroDoApartamento(registro.getInt("nro_porta"));
-            apto.setQuantidadeDeQuartos(registro.getInt("qtde_quartos"));
-            apto.setTipoDeOcupacao(registro.getString("tipo"));
-            Proprietario proprietario = new Proprietario();
-            proprietario.setId(registro.getLong("id_proprietario"));
-            proprietario.setNome(registro.getString("nome"));
-            proprietario.setTelefone(registro.getString("telefone"));
-            apto.setProprietario(proprietario);
-            return apto;
-        }, id);
+        return jdbc.queryForObject("select * from apartamento a, proprietario p where a.id_apartamento=? and a.proprietario_id_proprietario=p.id_proprietario;",
+                (registro, contador) -> {
+                    Apartamento apto = new Apartamento();
+                    apto.setId(registro.getLong("id_apartamento"));
+                    apto.setNumeroDoApartamento(registro.getInt("nro_porta"));
+                    apto.setQuantidadeDeQuartos(registro.getInt("qtde_quartos"));
+                    apto.setTipoDeOcupacao(registro.getString("tipo"));
+                    Proprietario proprietario = new Proprietario();
+                    proprietario.setId(registro.getLong("id_proprietario"));
+                    proprietario.setNome(registro.getString("nome"));
+                    proprietario.setTelefone(registro.getString("telefone"));
+                    apto.setProprietario(proprietario);
+                    return apto;
+                }, id);
     }
 }
