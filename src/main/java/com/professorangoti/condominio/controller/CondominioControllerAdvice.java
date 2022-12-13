@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @ControllerAdvice
-public class MyControllerAdvice {
-  
+public class CondominioControllerAdvice {
+
   @ExceptionHandler(java.sql.SQLIntegrityConstraintViolationException.class)
   public String violaçãoDeIntegridade(java.sql.SQLIntegrityConstraintViolationException ex,
       final RedirectAttributes redirectAttributes) {
