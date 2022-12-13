@@ -1,19 +1,24 @@
 package com.professorangoti.condominio.controller;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileSystemUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.professorangoti.condominio.model.Apartamento;
 import com.professorangoti.condominio.repository.ApartamentoRepository;
 import com.professorangoti.condominio.repository.ImagemRepository;
 import com.professorangoti.condominio.repository.ProprietarioRepository;
-import com.professorangoti.uploadfiles.storage.StorageService;
 
 @Controller
 public class ApartamentoController {
@@ -26,9 +31,8 @@ public class ApartamentoController {
 
     @Autowired
     private ProprietarioRepository repoPropietario;
-    
-    @Autowired
-    private StorageService storageService;
+
+    private final Path root = Paths.get("C:\\Spring\\condominio\\src\\main\\resources\\static\\image-upload");
 
     @GetMapping("cad_apto")
     public String formCadastroApartamento(Model model) {
@@ -45,16 +49,7 @@ public class ApartamentoController {
 
     @GetMapping("rel_apto")
     public String relatorio(Model model) {
-        // Timestamp timestamp1 = new Timestamp(System.currentTimeMillis());
-        // List<Apartamento> lista = repoApartamento.findAll();
-        // Timestamp timestamp2 = new Timestamp(System.currentTimeMillis());
-        // System.out.println("------------ tempo de execução: " + (timestamp2.getTime()
-        // - timestamp1.getTime()));
-        // timestamp1 = new Timestamp(System.currentTimeMillis());
-        List<Apartamento> lista2 = repoApartamento.findAll2();
-        // timestamp2 = new Timestamp(System.currentTimeMillis());
-        // System.out.println("=============tempo de execução: " + (timestamp2.getTime()
-        // - timestamp1.getTime()));
+        List<Apartamento> lista2 = repoApartamento.findAll();
         model.addAttribute("apartamentos", lista2);
         return "rel_apto";
     }
@@ -67,9 +62,24 @@ public class ApartamentoController {
     }
 
     @GetMapping("excluir_foto")
-    public String excluirFoto(@RequestParam("id") String id) {
+    public String excluirFoto(@RequestParam("id") String id) throws IOException {
+        String fileName = repoImagem.findById(Long.parseLong(id));
         repoImagem.delete(Long.parseLong(id));
-        // storageService.
+        Files.deleteIfExists(root.resolve(fileName));
+        return "redirect:/rel_apto";
+    }
+
+    // upload de fotos
+    @GetMapping("upload")
+    public String exibeFormpload(Model model, @RequestParam("id") String id) {
+        model.addAttribute("id", id);
+        return "upload_form";
+    }
+
+    @PostMapping("upload")
+    public String submit(@RequestParam("file") MultipartFile file, @RequestParam("id") String id) throws IOException {
+        Files.copy(file.getInputStream(), root.resolve(file.getOriginalFilename()));
+        repoImagem.adicionaImagem(Long.parseLong(id), file.getOriginalFilename());
         return "redirect:/rel_apto";
     }
 
