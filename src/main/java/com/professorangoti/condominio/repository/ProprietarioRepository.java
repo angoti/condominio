@@ -29,7 +29,7 @@ public class ProprietarioRepository {
         return jdbc.queryForObject("select * from proprietario where id_proprietario=?", this::mapper, id);
     }
 
-    private Proprietario mapper(ResultSet registro, int contador) throws SQLException {
+    private Proprietario mapper(ResultSet registro, int linha) throws SQLException {
         return new Proprietario(registro.getLong("id_proprietario"), registro.getString("nome"),
                 registro.getString("telefone"));
     }

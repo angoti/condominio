@@ -29,4 +29,5 @@ public class CondominioControllerAdvice {
     model.addAttribute("message", "Tamanho do arquivo excede o permitido (128KB). Tente novamente.");
     return "error";
   }
+
 }

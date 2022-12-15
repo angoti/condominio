@@ -1,8 +1,12 @@
 <!DOCTYPE html>
-<html th:include="template :: modelo" lang="pt-br">
-
+<html th:include="template :: modelo">
 <div th:fragment="conteudo">
-
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/home">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Fotos</li>
+    </ol>
+  </nav>
   <div class="card mb-3">
     <div class="card-header">
       <div class="row">
@@ -36,7 +40,6 @@
       </div>
     </div>
   </div>
-
 </div>
 
 </html>
