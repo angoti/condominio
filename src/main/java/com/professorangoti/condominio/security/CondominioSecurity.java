@@ -5,13 +5,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
-public class WebConfigSecurity {
+public class CondominioSecurity {
 
   @Bean
   public UserDetailsService userDetailsService() {
@@ -31,15 +32,18 @@ public class WebConfigSecurity {
     return authProvider;
   }
 
+  // org.springframework.security.web.SecurityFilterChain 
+  // Defines a filter chain which is capable of being matched against an HttpServletRequest
+  // in order to decide whether it applies to that request. Used to configure a FilterChainProxy.
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http.authorizeRequests(authorize -> authorize
-        .antMatchers("/fotos_apto","/rel_apto","/rel_prop").hasAnyAuthority("ADMIN", "USUARIO") // permissão para visualizar
-        .antMatchers("/cad_apto","/cad_prop","/upload").hasAnyAuthority("ADMIN", "CRIADOR")     // permissão para criar
-        .antMatchers("/excluir_prop","/excluir_foto").hasAnyAuthority("ADMIN", "EDITOR")        // permissão para editar/excluir
+    http.authorizeHttpRequests(authorize -> authorize
+        .antMatchers("/upload", "/cad_apto", "/cad_prop").hasAnyAuthority("MORADOR", "ADMIN") // permissão para criar
+        .antMatchers("/fotos_apto", "/rel_apto", "/rel_prop").hasAnyAuthority("USUARIO", "MORADOR", "ADMIN") // permissão para visualizar
+        .antMatchers("/excluir_foto", "/excluir_prop").hasAnyAuthority("ADMIN") // permissão para editar/excluir
         .antMatchers("/", "/home").permitAll()
         .anyRequest().authenticated())
-        
+
         .formLogin(form -> form.loginPage("/login").permitAll())
         .logout().logoutSuccessUrl("/");
     return http.build();

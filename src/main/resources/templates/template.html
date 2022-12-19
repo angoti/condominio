@@ -21,35 +21,40 @@
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="/home">Home</a>
                     </li>
-                    <li class="nav-item dropdown">
+                    <li sec:authorize="isAuthenticated()" class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Apartamentos
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/rel_apto">Listagem</a></li>
-                            <li><a class="dropdown-item" href="/cad_apto">Novo</a></li>
+                            <li><a class="dropdown-item" href="/rel_apto" sec:authorize-url="/rel_apto">Listagem</a></li>
+                            <li><a class="dropdown-item" href="/cad_apto" sec:authorize-url="/cad_apto">Novo</a></li>
                         </ul>
                     </li>
-                    <li class="nav-item dropdown">
+                    <li sec:authorize="isAuthenticated()" class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Proprietários
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/rel_prop">Listagem</a></li>
-                            <li><a class="dropdown-item" href="/cad_prop">Novo</a></li>
+                            <li><a class="dropdown-item" href="/rel_prop" sec:authorize-url="/rel_prop">Listagem</a></li>
+                            <li><a class="dropdown-item" href="/cad_prop" sec:authorize-url="/cad_prop">Novo</a></li>
                         </ul>
                     </li>
                 </ul>
             </div>
-            <div class="d-flex col-2" sec:authorize="isAuthenticated()">
-                <span class="text-white small" sec:authentication="name">opa</span>
+            <!-- Alteração do fragmento da barra de navegação para adicionar botão de logout e saudação do usuário logado -->
+            <div class="col-3 text-white small" sec:authorize="isAuthenticated()">
+                <span sec:authentication="name">opa</span>
+                <span sec:authentication="principal.authorities"></span>
             </div>
+
             <div class="align-self-center">
                 <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()">
                     <input class="btn btn-secondary btn-sm p-1 small" type="submit" value="Sair" />
                 </form>
                 <a href="/login" sec:authorize="!isAuthenticated()" class="btn btn-secondary btn-sm p-1 small">Entrar</a>
             </div>
+            <!-- Alteração do fragmento da barra de navegação para adicionar botão de logout e saudação do usuário logado -->
+
         </div>
     </nav>
     <main th:replace="this :: conteudo"></main>

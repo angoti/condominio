@@ -21,7 +21,6 @@ public class CondominioUserDetailsService implements UserDetailsService {
     if (usuario == null) {
       throw new UsernameNotFoundException("Usuário não autenticado!");
     }
-    System.out.println("-------------------------> usuario autenticado");
     System.out.println(usuario.getPapeis());
     return new CondominioUserDetails(usuario);
   }

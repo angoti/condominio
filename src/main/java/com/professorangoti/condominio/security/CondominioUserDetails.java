@@ -23,7 +23,6 @@ public class CondominioUserDetails implements UserDetails {
     List<SimpleGrantedAuthority> authorities = new ArrayList<>();
     for (String papel : papeis) {
       authorities.add(new SimpleGrantedAuthority(papel));
-      System.out.println("-------------> " + papel);
     }
     return authorities;
   }

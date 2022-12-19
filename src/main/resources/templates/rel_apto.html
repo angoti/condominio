@@ -29,8 +29,8 @@
         <td th:text="${apto.numeroDoApartamento}"></td>
         <td th:text="${apto.tipoDeOcupacao}"></td>
         <td>
-          <a th:href="@{/upload(id=${apto.id})}">Adicionar foto</a>
-          <a th:href="@{/fotos_apto(id=${apto.id})}">Ver fotos</a>
+          <a th:href="@{/upload(id=${apto.id})}" sec:authorize-url="/upload">Adicionar foto</a>
+          <a th:href="@{/fotos_apto(id=${apto.id})}" sec:authorize-url="/fotos_apto">Ver fotos</a>
         </td>
       </tr>
     </tbody>
